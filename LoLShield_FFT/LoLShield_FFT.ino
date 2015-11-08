@@ -24,7 +24,7 @@ int i=0,val;
 
 
 void setup() {
-  LedSign::Init();            // initilizes the LoL Shield
+  LedSign::Init(DOUBLE_BUFFER);            // initilizes the LoL Shield
 }
 
 
@@ -46,22 +46,26 @@ void loop() {
   // average bars together
   for (i=0; i<14; i++) {
     data_avgs[i] = data[i*4] + data[i*4 + 1] + data[i*4 + 2] + data[i*4 + 3];   // average together 
-    data_avgs[i] = map(data_avgs[i], 0, 30, 0, 9);                              // remap values for LoL
+    data_avgs[i] = map(data_avgs[i], 0, 10, 0, 9);                              // remap values for LoL
   }
 
 
 
   // set LoLShield
+  LedSign::Clear(0);
+  
   for (int x=0; x < 14; x++) {
     for (int y=0; y < 9; y++) {
       if (y < data_avgs[13-x]) { // 13-x reverses the bars so low to high frequences are represented from left to right.
         LedSign::Set(x,y,1);        // set the LED on
       } 
-      else {
-        LedSign::Set(x,y,0);       // set the LED off
-      }
+      //else {
+      //  LedSign::Set(x,y,0);       // set the LED off
+      //}
     } 
   }
+  
+  LedSign::Flip(true);
 
 }
 
